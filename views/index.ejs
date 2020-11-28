@@ -1,0 +1,40 @@
+<%- include("partials/header.ejs"); -%>
+<div class="fluid-container">
+  <img src="/images/YOSU.png" class="logo" alt="">
+  <h3 class="small-text">Your Own Short Url</h3>
+  <form class="form-inline url-form" action="/shorten" method="post">
+      <label for="full-link" class="col-form-label link-label">Link to Shorten: </label>
+        <input autofocus type="text" class="form-control col mr-2" id="full-link" name="URL" placeholder="eg. google.com">
+        <button type="submit" class="btn btn-short">Shorten!</button>
+  </form>
+  <div class="links-table">
+    <div style="width: 1px;"></div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th style="width: 40%">Full URL</th>
+          <th style="width: 20%">Short URL</th>
+          <th style="width: 20%">Clicks</th>
+          <th style="width: 20%">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% links.forEach(link => { %>
+          <tr>
+            <td><a href="<%= link.url %>" target="_blank"><%= link.url %></a></td>
+            <td><%= link.identifier %></a></td>
+            <td><%= link.clicks %></td>
+            <td>
+              <form action="/delete" method="POST">
+                <input style="display: none" name="ID" value=<%= link.identifier %>>
+                <button type="submit" class="btn btn-danger"></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <div style="width: 1px"></div>
+  </div>
+</div>
+<%- include("partials/footer.ejs"); -%>
