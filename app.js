@@ -41,45 +41,57 @@ app.get('/', async(req, res) => {
 });
 
 app.post('/shorten', async(req, res) => {
-    let id = null
-    while (1) {
-        id = nanoid(7)
-        if (await Link.exists({ identifier: id })) continue;
-        else break;
+    if (req.body.PW == process.env.PW){
+        let id = null
+        while (1) {
+            id = nanoid(7)
+            if (await Link.exists({ identifier: id })) continue;
+            else break;
+        }
+    
+        let url = req.body.URL
+        if (!(url.startsWith('https://') || url.startsWith('http://'))) {
+            url = 'https://' + url
+        }
+    
+        await Link.create({
+            identifier: id,
+            url: url,
+            clicks: 0
+        })
+    
+        res.redirect('/')
+    }else{
+        res.send(`<div style="display: flex; justify-content: center;">
+        <h1>Wrong Password</h1>
+      </div> `)
     }
-
-    let url = req.body.URL
-    if (!(url.startsWith('https://') || url.startsWith('http://'))) {
-        url = 'https://' + url
-    }
-
-    await Link.create({
-        identifier: id,
-        url: url,
-        clicks: 0
-    })
-
-    res.redirect('/')
 });
 
 app.post('/delete', (req, res) => {
-    Link.findOneAndRemove({ identifier: req.body.ID }, (err, deleted) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(deleted)
-        }
-    })
-    res.redirect('/')
+    if (req.body.PW == process.env.PW) {
+        Link.findOneAndRemove({ identifier: req.body.ID }, (err, deleted) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log(deleted)
+            }
+        })
+        res.redirect('/')
+    }else{
+        res.send(`<div style="display: flex; justify-content: center;">
+        <h1>Wrong Password</h1>
+      </div> `)
+    }
 })
 
 app.get('/:url', (req, res) => {
-    Link.findOne({ identifier: req.params.url }, (err, link) => {
-        if (err) {
-            console.log(err)
-            res.redirect('/')
-        }
-        if (!err) {
+    Link.findOne({ identifier: req.params.url }).then( (link) => {
+        if (link === undefined) {
+            res.send(`<div style="display: flex; justify-content: center;">
+            <h1>Link Not Found</h1>
+          </div> `)
+        }else{
             link.clicks++;
             link.save()
 
