@@ -76,7 +76,7 @@
     function copy(id){
       navigator.permissions.query({name: "clipboard-write"}).then(result => {
         if (result.state == 'granted' || result.state == 'prompt'){
-          navigator.clipboard.writeText('http://pyosu.herokuapp.com/' + id).then(() => {alert('Copied!')}, () => {alert('Copy Failed')})
+          navigator.clipboard.writeText('<your-domain>' + id).then(() => {alert('Copied!')}, () => {alert('Copy Failed')})
         }
       })
     }
