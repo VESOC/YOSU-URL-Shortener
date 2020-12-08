@@ -39,11 +39,11 @@
         <% links.forEach(link => { %>
           <tr>
             <td><a href="<%= link.url %>" target="_blank"><%= link.url %></a></td>
-            <td onclick="copy('<%= link.identifier %>')"><a><%= link.identifier %></a></td>
+            <td><button class="btn btn-success" onclick="copy('<%= link.identifier %>')"><%= link.identifier %></button></td>
             <td><%= link.clicks %></td>
             <form action="/delete" method="POST">
             <td>
-                <input style="display: none" name="ID" value=<%= link.identifier %>>
+                <input style="display: none;" name="ID" value=<%= link.identifier %>>
                 <button type="submit" class="btn btn-danger"></button>
               </td>
               <td>
@@ -74,11 +74,16 @@
     ></script>
     <script>
     function copy(id){
-      navigator.permissions.query({name: "clipboard-write"}).then(result => {
-        if (result.state == 'granted' || result.state == 'prompt'){
-          navigator.clipboard.writeText('<your-domain>' + id).then(() => {alert('Copied!')}, () => {alert('Copy Failed')})
-        }
-      })
+      const el = document.createElement('textarea')
+      el.value = 'link' + id
+      el.setAttribute('readonly', '')
+      el.style.position = 'absolute'
+      el.style.left = '-9999px'
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      alert('Link Copied!')
     }
     </script>
   </body>
