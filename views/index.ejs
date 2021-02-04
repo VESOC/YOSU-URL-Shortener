@@ -14,50 +14,50 @@
     <title>URL Shortener</title>
   </head>
   <body>
-<div class="fluid-container">
-  <img src="/images/YOSU.png" class="logo" alt="">
-  <h3 class="small-text">Your Own Short Url</h3>
-  <form class="form-inline url-form" action="/shorten" method="post">
-      <label for="full-link" class="col-form-label link-label">Link to Shorten: </label>
-        <input autofocus type="text" class="form-control col-7 mr-2" id="full-link" name="URL" placeholder="eg. google.com">
-        <input type="password" class="form-control col-2 mr-2" name="PW" value="" placeholder="Enter password">
-        <button type="submit" class="btn btn-short">Shorten!</button>
-  </form>
-  <div class="links-table">
-    <div style="width: 1px;"></div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th style="width: 40%">Full URL</th>
-          <th style="width: 15%">Short URL</th>
-          <th style="width: 15%">Clicks</th>
-          <th style="width: 15%">Delete</th>
-          <th style="width: 13%">Password</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% links.forEach(link => { %>
-          <tr>
-            <td><a href="<%= link.url %>" target="_blank"><%= link.url %></a></td>
-            <td><button class="btn btn-success" onclick="copy('<%= link.identifier %>')"><%= link.identifier %></button></td>
-            <td><%= link.clicks %></td>
-            <form action="/delete" method="POST">
-            <td>
-                <input style="display: none;" name="ID" value=<%= link.identifier %>>
-                <button type="submit" class="btn btn-danger"></button>
-              </td>
-              <td>
-                <input class="input-group-text" type="password" name="PW" placeholder="Enter password...">
-              </td>
-            </form>
+  <div class="fluid-container">
+    <img src="/images/YOSU.png" class="logo" alt="">
+    <div class="d-flex flex-wrap justify-content-center">
+      <form class="form-inline url-form justify-content-center" action="/shorten" method="post">
+        <label for="full-link"></label>
+        <input autofocus type="text" class="form-control m-1" style="width: 80%;" id="full-link" name="URL" placeholder="Enter link...">
+        <label for="PW"></label>
+        <input type="password" class="form-control m-1" style="width: 20%;" id="PW" name="PW" value="" placeholder="Enter password...">
+        <button type="button" class="btn btn-short m-1" style="width: 15%;">Shorten!</button>
+      </form>
+    </div>
+    <div class="links-table">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr class="row">
+            <th class="col-6">Full URL</th>
+            <th class="col-2">Short URL</th>
+            <th class="col">Clicks</th>
+            <th class="col-2">Password</th>
+            <th class="col">Delete</th>
           </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    <div style="width: 1px"></div>
+        </thead>
+        <tbody>
+          <% links.forEach(link => { %>
+            <form action="/delete" method="POST">
+              <tr class="row">
+                <td class="link-td col-6"><a href="<%= link.url %>" target="_blank"><%= link.url %></a></td>
+                <td class="col-2"><button class="btn btn-success" onclick="copy('<%= link.identifier %>')"><%= link.identifier %></button></td>
+                <td class="col"><%= link.clicks %></td>
+                <input style="display: none;" name="ID" value=<%= link.identifier %>>
+                <td class="col-2">
+                  <input class="input-group-text" type="password" name="PW">
+                </td>
+                <td class="col">
+                  <button type="submit" class="btn btn-danger"></button>
+                </td>
+              </tr>
+            </form>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-<script
+  <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
       crossorigin="anonymous"
@@ -75,7 +75,7 @@
     <script>
     function copy(id){
       const el = document.createElement('textarea')
-      el.value = 'link' + id
+      el.value = 'www.yosu.ml/' + id
       el.setAttribute('readonly', '')
       el.style.position = 'absolute'
       el.style.left = '-9999px'
